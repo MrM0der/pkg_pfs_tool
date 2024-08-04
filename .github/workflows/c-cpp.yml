@@ -1,0 +1,35 @@
+name: Build PS4 PKG/PFS Tool
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up build environment
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libmbedtls-dev uthash-dev zlib1g-dev
+
+      - name: Build project
+        run: |
+          mkdir build
+          cd build
+          cmake ..
+          make
+
+      - name: Archive project
+        run: |
+          tar czf project_artifact.tar.gz build/
+          echo "::set-output name=artifact_path::project_artifact.tar.gz"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: project-artifact
+          path: ${{ steps.archive.outputs.artifact_path }}
