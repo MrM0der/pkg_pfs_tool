@@ -32,4 +32,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: project-artifact
-          path: ${{ steps.archive.outputs.artifact_path }}
+          path: project_artifact.tar.gz
